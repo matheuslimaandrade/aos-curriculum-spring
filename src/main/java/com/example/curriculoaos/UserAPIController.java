@@ -7,24 +7,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/api/users")
+public class UserAPIController {
 
-    private final UserRepository userRepository;
+    private final UserDAO userDAO;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserAPIController(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @GetMapping
-    public ResponseEntity<List<Users>> getAllUsers() {
-        List<Users> users = userRepository.findAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userDAO.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Users> getUserById(@PathVariable("id") Long id) {
-        Users user = userRepository.findById(id).orElse(null);
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+        User user = userDAO.findById(id).orElse(null);
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
@@ -33,16 +33,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Users> createUser(@RequestBody Users user) {
-        Users newUser = userRepository.save(user);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User newUser = userDAO.save(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Users> updateUser(@PathVariable("id") Long id, @RequestBody Users user) {
-        if (userRepository.existsById(id)) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        if (userDAO.existsById(id)) {
             user.setId(id);
-            Users updatedUser = userRepository.save(user);
+            User updatedUser = userDAO.save(user);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -51,8 +51,8 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
+        if (userDAO.existsById(id)) {
+            userDAO.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

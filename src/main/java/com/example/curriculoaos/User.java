@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "usersTable")
-public class Users {
+@Table(name = "user_table")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String name;
-    private String email;
-    private String description;
-    private String job;
+    private String fullName;
+    private String emailAddress;
+    private String profileDescription;
+    private String jobTitle;
 }
